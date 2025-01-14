@@ -8,4 +8,6 @@ export default {
   },
 
   plugins: [],
+
+  darkMode: "selector",
 } satisfies Config;
