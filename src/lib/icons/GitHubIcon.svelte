@@ -1,9 +1,9 @@
 <script lang="ts">
-  let { size = "medium" }: { size?: "small" | "medium" } = $props();
+  let { size = "md" }: { size?: "sm" | "md" } = $props();
 
   const styles = {
-    small: "h-5 w-5",
-    medium: "h-6 w-6",
+    sm: "h-5 w-5",
+    md: "h-6 w-6",
   }[size];
 </script>
 
