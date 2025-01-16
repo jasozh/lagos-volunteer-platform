@@ -61,13 +61,16 @@
 
 <div class="relative w-full">
   <!-- Carousel -->
-  <div class="flex">
-    <div class="relative mx-auto h-[720px] w-full">
+  <div class="relative">
+    <div
+      class="relative h-[720px] w-screen overflow-hidden"
+      style="left: calc(-50vw + 50%);"
+    >
       {#each slides as imageIndex, slidePosition}
         {@const translatePercent = 100 * (slidePosition - position)}
-        {@const translateConstant = 160 * (slidePosition - position)}
+        {@const translateConstant = 96 * (slidePosition - position)}
         <div
-          class="absolute inset-0 overflow-hidden rounded-lg duration-700 ease-in-out"
+          class="absolute inset-0 mx-auto max-w-screen-xl overflow-hidden rounded-lg duration-700 ease-in-out"
           style="transform: translateX(calc({translatePercent}% + {translateConstant}px));"
         >
           <img
