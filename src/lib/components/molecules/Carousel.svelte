@@ -56,20 +56,19 @@
     return changeSlide(next);
   }
 
-  let autoSlide = setInterval(showNext, 8000);
+  // let autoSlide = setInterval(showNext, 8000);
 </script>
-
-<button onclick={() => console.log(slides)}>a</button>
 
 <div class="relative w-full">
   <!-- Carousel -->
   <div class="flex">
-    <div class="relative mx-auto h-[720px] w-full overflow-hidden rounded-lg">
+    <div class="relative mx-auto h-[720px] w-full">
       {#each slides as imageIndex, slidePosition}
-        {@const translate = 100 * (slidePosition - position)}
+        {@const translatePercent = 100 * (slidePosition - position)}
+        {@const translateConstant = 160 * (slidePosition - position)}
         <div
-          class="absolute inset-0 duration-700 ease-in-out"
-          style="transform: translateX({translate}%);"
+          class="absolute inset-0 overflow-hidden rounded-lg duration-700 ease-in-out"
+          style="transform: translateX(calc({translatePercent}% + {translateConstant}px));"
         >
           <img
             src={images[imageIndex].src}
