@@ -1,9 +1,17 @@
 <script lang="ts">
   let {
     images,
+    mode = "fill",
   }: {
     images: { src: string; alt?: string; header?: string; label?: string }[];
+    mode?: "fill" | "fit";
   } = $props();
+
+  /** Styles for the <img> tag */
+  const styles = {
+    fill: "h-full w-full object-cover",
+    fit: "max-w-full max-h-full m-auto object-contain",
+  }[mode];
 
   /**
    * A number array of the current slides in the carousel
@@ -27,10 +35,12 @@
   /** The current position in the slides, unrelated to the actual image index */
   let position = $state(2);
 
+  // Define the current and adjacent image indices in the slides
   let curr = $state(0);
   let prev = $derived(curr > 0 ? curr - 1 : images.length - 1);
   let next = $derived(curr < images.length - 1 ? curr + 1 : 0);
 
+  /** Changes the slide position to the provided image index */
   function changeSlide(slideTarget: number) {
     let [fakeLastPosition, realLastPosition] = [1, slides.length - 3];
     let [fakeFirstPosition, realFirstPosition] = [slides.length - 2, 2];
@@ -52,32 +62,39 @@
     autoSlide = setInterval(showNext, 8000);
   }
 
+  /** Change to the next slide */
   function showNext() {
     return changeSlide(next);
   }
 
-  // let autoSlide = setInterval(showNext, 8000);
+  // Define autoslide timer and remove on unmount
+  let autoSlide = setInterval(showNext, 8000);
+  $effect(() => {
+    return () => clearInterval(autoSlide);
+  });
 </script>
 
 <div class="relative w-full">
   <!-- Carousel -->
   <div class="relative">
     <div
-      class="relative h-[720px] w-screen overflow-hidden"
+      class="relative h-72 w-screen overflow-hidden md:h-[720px]"
       style="left: calc(-50vw + 50%);"
     >
       {#each slides as imageIndex, slidePosition}
         {@const translatePercent = 100 * (slidePosition - position)}
         {@const translateConstant = 96 * (slidePosition - position)}
         <div
-          class="absolute inset-0 mx-auto max-w-screen-xl overflow-hidden rounded-lg duration-700 ease-in-out"
+          class="absolute inset-0 mx-auto max-w-screen-xl overflow-hidden duration-700 ease-in-out"
           style="transform: translateX(calc({translatePercent}% + {translateConstant}px));"
         >
-          <img
-            src={images[imageIndex].src}
-            class="absolute left-1/2 top-1/2 block w-full -translate-x-1/2 -translate-y-1/2"
-            alt={images[imageIndex].alt}
-          />
+          <div class="flex h-full w-full px-6">
+            <img
+              src={images[imageIndex].src}
+              class="{styles} rounded-2xl"
+              alt={images[imageIndex].alt}
+            />
+          </div>
         </div>
       {/each}
     </div>
