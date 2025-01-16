@@ -1,38 +1,18 @@
-# sv
+# jasozh.github.io
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A static website written in Svelte that provides details about the LFBI Volunteer Platform.
 
-## Creating a project
+## CI/CD
 
-If you're seeing this, you've probably already done this step. Congrats!
+The repository is configured with automatic security updates using Dependabot and automatic build testing before each pull request. The CI/CD pipeline consists of the following workflows:
 
-```bash
-# create a new project in the current directory
-npx sv create
+- `deploy.yml` automatically deploys the website to GitHub Pages on every push to the `main` branch.
+- `pull-request.yml` runs a sanity check on every opened pull request to make sure the app still builds.
+- `dependabot-auto-merge.yml` automatically merges pull requests by Dependabot if it passes the sanity check.
 
-# create a new project in my-app
-npx sv create my-app
-```
+The following GitHub settings are used:
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- **Pages > Source: GitHub Actions**
+- **Code security > Grouped security updates**
+- **General > Allow auto-merge**
+- **Branches > Branch protection > Require status checks to pass before merging (pull_request_build)**
