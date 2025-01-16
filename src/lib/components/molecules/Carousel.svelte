@@ -13,6 +13,8 @@
     fit: "max-w-full max-h-full m-auto object-contain",
   }[mode];
 
+  let animate = $state(true);
+
   /**
    * A number array of the current slides in the carousel
    *
@@ -41,22 +43,22 @@
   let next = $derived(curr < images.length - 1 ? curr + 1 : 0);
 
   /** Changes the slide position to the provided image index */
-  function changeSlide(slideTarget: number) {
+  function changeSlide(target: number, click: boolean) {
     let [fakeLastPosition, realLastPosition] = [1, slides.length - 3];
     let [fakeFirstPosition, realFirstPosition] = [slides.length - 2, 2];
 
     // Do teleportation if needed
-    if (position === realLastPosition && slideTarget === next) {
+    if (position === realLastPosition && target === next && !click) {
+      animate = false;
       position = fakeLastPosition;
-      position++;
-    } else if (position === realFirstPosition && slideTarget === prev) {
+    } else if (position === realFirstPosition && target === prev && !click) {
+      animate = false;
       position = fakeFirstPosition;
-      position--;
     } else {
-      position = slideTarget + 2;
+      animate = true;
+      position = target + 2;
+      curr = target;
     }
-
-    curr = slideTarget;
 
     clearInterval(autoSlide);
     autoSlide = setInterval(showNext, 8000);
@@ -64,7 +66,7 @@
 
   /** Change to the next slide */
   function showNext() {
-    return changeSlide(next);
+    return changeSlide(next, false);
   }
 
   // Define autoslide timer and remove on unmount
@@ -85,7 +87,10 @@
         {@const translatePercent = 100 * (slidePosition - position)}
         {@const translateConstant = 96 * (slidePosition - position)}
         <div
-          class="absolute inset-0 mx-auto max-w-screen-xl overflow-hidden duration-700 ease-in-out"
+          class={[
+            "absolute inset-0 mx-auto max-w-screen-xl overflow-hidden",
+            animate && "duration-700 ease-in-out",
+          ]}
           style="transform: translateX(calc({translatePercent}% + {translateConstant}px));"
         >
           <div class="flex h-full w-full px-6">
@@ -107,7 +112,7 @@
         {@const bg = curr === i ? "bg-gray-900" : "bg-gray-300"}
         <button
           type="button"
-          onclick={(event) => changeSlide(i)}
+          onclick={(event) => changeSlide(i, true)}
           class="h-3 w-3 rounded-full {bg}"
           aria-current={curr === i ? "true" : "false"}
           aria-label="Slide {i}"
