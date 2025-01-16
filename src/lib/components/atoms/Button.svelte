@@ -37,7 +37,12 @@
 
 <button
   type="button"
-  class="inline-flex items-center border text-center focus-visible:z-10 {dimensions} {color} {border}"
+  class={[
+    "inline-flex items-center border text-center focus-visible:z-10",
+    dimensions,
+    color,
+    border,
+  ]}
 >
   {@render children()}
 </button>
