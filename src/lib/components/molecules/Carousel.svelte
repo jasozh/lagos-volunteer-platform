@@ -91,7 +91,7 @@
           <div class="flex h-full w-full px-6">
             <img
               src={images[imageIndex].src}
-              class="{styles} rounded-2xl"
+              class="{styles} rounded-2xl border border-gray-200"
               alt={images[imageIndex].alt}
             />
           </div>
